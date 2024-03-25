@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: EchoSphere
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://8.138.126.193:3306/echosphere?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: 1234abcd.
+      initial-size: 10
+      max-active: 100
+      max-wait: 60000
+      min-idle: 10
+      test-while-idle: true
+      min-evictable-idle-time-millis: 300000
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*   #druid监控页面地址
+        reset-enable: false
+        login-username: druid
+        login-password: druid
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
