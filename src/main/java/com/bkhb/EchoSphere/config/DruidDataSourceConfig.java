@@ -18,7 +18,7 @@ import java.io.IOException;
 
 
 /**
- * TODO
+ * 连接池配置
  *
  * @author bkhb
  * @version 1.0

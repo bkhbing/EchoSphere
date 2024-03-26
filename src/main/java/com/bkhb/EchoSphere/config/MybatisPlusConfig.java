@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * TODO
+ * MybatisPlus配置
  *
  * @author bkhb
  * @version 1.0
