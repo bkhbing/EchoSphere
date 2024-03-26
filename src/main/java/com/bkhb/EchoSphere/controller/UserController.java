@@ -1,6 +1,8 @@
 package com.bkhb.EchoSphere.controller;
 
 import com.bkhb.EchoSphere.entity.User;
+import com.bkhb.EchoSphere.execption.BadRequestException;
+import com.bkhb.EchoSphere.execption.EntityExistException;
 import com.bkhb.EchoSphere.result.ResultWrapper;
 import com.bkhb.EchoSphere.service.IUserService;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,9 @@ public class UserController {
 
     @GetMapping
     public User getUser() {
+        if (1 == 1) {
+            throw new EntityExistException(User.class, "email", "elunez@qq.com");
+        }
         return userService.getUser(1L);
     }
 }

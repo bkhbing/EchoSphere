@@ -15,6 +15,11 @@ public enum BaseResultCodeEnum implements IResultCode, IDict<Integer> {
     SUCCESS(200, "操作成功"),
 
     /**
+     * 错误的请求
+     */
+    BAD_REQUEST(400, "请求错误"),
+
+    /**
      * 系统异常
      */
     SYSTEM_ERROR(500, "系统异常"),
