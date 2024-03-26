@@ -1,6 +1,7 @@
 package com.bkhb.EchoSphere.controller;
 
 import com.bkhb.EchoSphere.entity.User;
+import com.bkhb.EchoSphere.result.ResultWrapper;
 import com.bkhb.EchoSphere.service.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class UserController {
     final private IUserService userService;
 
     @GetMapping
-    public User getUser() {
-        return userService.getUser(1L);
+    public ResultWrapper<User> getUser() {
+        return ResultWrapper.success(userService.getUser(1L));
     }
 }
