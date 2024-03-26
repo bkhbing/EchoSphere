@@ -23,7 +23,7 @@ public class UserController {
     final private IUserService userService;
 
     @GetMapping
-    public ResultWrapper<User> getUser() {
-        return ResultWrapper.success(userService.getUser(1L));
+    public User getUser() {
+        return userService.getUser(1L);
     }
 }
