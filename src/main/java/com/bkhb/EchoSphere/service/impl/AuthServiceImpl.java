@@ -50,4 +50,9 @@ public class AuthServiceImpl implements IAuthService {
     public void logout() {
         StpUtil.logout();
     }
+
+    @Override
+    public void register(User user) {
+        userService.addUser(user);
+    }
 }

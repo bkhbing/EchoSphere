@@ -1,8 +1,10 @@
 package com.bkhb.EchoSphere.controller;
 
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.bkhb.EchoSphere.api.AuthenticationRequest;
+import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.service.IAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,9 +29,10 @@ public class AuthController {
     /**
      * 注册方法
      */
+    @SaIgnore
     @PostMapping("/register")
-    public String register() {
-        return "123";
+    public void register(@RequestBody User user) {
+        authenticate.register(user);
     }
 
     /**

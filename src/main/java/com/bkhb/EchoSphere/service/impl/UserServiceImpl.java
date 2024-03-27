@@ -1,11 +1,13 @@
 package com.bkhb.EchoSphere.service.impl;
 
+import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bkhb.EchoSphere.entity.User;
+import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.UserMapper;
 import com.bkhb.EchoSphere.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -54,5 +56,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public List<User> getUserList() {
         return userMapper.selectList(null);
+    }
+
+    @Override
+    public User addUser(User user) {
+        // 判断用户名和邮箱是否唯一
+        if (userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getUsername, user.getUsername())) > 0
+                || userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail())) > 0) {
+            throw new BadRequestException("用户名或者邮箱已经存在");
+        }
+        user.setPassword(BCrypt.hashpw(user.getPassword()));
+        userMapper.insert(user);
+        return user;
     }
 }

@@ -7,6 +7,7 @@ import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
 import com.bkhb.EchoSphere.result.IResultCode;
 import com.bkhb.EchoSphere.result.ResultWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -91,5 +92,17 @@ public class GlobalExceptionHandler {
         // 打印堆栈信息
         log.error(ExceptionUtil.stacktraceToString(e));
         return ResultWrapper.fail(BaseResultCodeEnum.NO_OPERATE_PERMISSION);
+    }
+
+    /**
+     * 处理 NotPermissionException
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public ResultWrapper<IResultCode> httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        // 打印堆栈信息
+        log.error(ExceptionUtil.stacktraceToString(e));
+        return ResultWrapper.fail(BaseResultCodeEnum.ILLEGAL_ARGUMENT);
     }
 }
