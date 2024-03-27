@@ -143,7 +143,9 @@ public enum BaseResultCodeEnum implements IResultCode, IDict<Integer> {
      * 用户名或密码错误
      */
     USERNAME_OR_PASSWORD_ERROR(1024, "用户名或密码错误"),
+    USER_DISABLED(1025, "用户未激活"),
     ;
+
 
     /**
      * 枚举编号

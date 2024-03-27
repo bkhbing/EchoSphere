@@ -37,6 +37,9 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public SaTokenInfo login(AuthenticationRequest request) {
         User user = userService.getUserByUsernameOrEmail(request.getEmail());
+        if (!user.getEnabled()) {
+            throw new BadRequestException(BaseResultCodeEnum.USER_DISABLED);
+        }
         if (user == null || !BCrypt.checkpw(request.getPassword(), user.getPassword())) {
             throw new BadRequestException(BaseResultCodeEnum.USERNAME_OR_PASSWORD_ERROR);
         }
