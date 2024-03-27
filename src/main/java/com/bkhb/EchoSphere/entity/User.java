@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -75,7 +77,7 @@ public class User {
     /**
      * 密码
      */
-    @TableField("`password`")
+    @TableField("password")
     private String password;
 
     /**
@@ -119,4 +121,17 @@ public class User {
      */
     @TableField("update_time")
     private LocalDateTime updateTime;
+
+    /**
+     * 菜单权限标识
+     */
+    @TableField(exist = false)
+    private List<String> permissionList;
+
+    /**
+     * 角色权限标识
+     */
+    @TableField(exist = false)
+    private List<String> roleList;
+
 }

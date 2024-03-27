@@ -1,4 +1,4 @@
-package com.bkhb.EchoSphere.dao;
+package com.bkhb.EchoSphere.mapper;
 
 import com.bkhb.EchoSphere.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -13,6 +13,8 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024-03-26 00:57:57
  */
 @Mapper
-public interface UserDao extends BaseMapper<User> {
+public interface UserMapper extends BaseMapper<User> {
     User getUser(Long userId);
+
+    User getUserByEmail(String username);
 }

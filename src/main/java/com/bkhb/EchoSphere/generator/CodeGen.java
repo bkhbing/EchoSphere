@@ -32,7 +32,7 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.bkhb.EchoSphere";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"sys_user"};
+    private static final String[] TBL_NAMES = {"sys_menu", "sys_role"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
     private static final String TABLE_PREFIX = "sys_";
@@ -86,7 +86,7 @@ public class CodeGen {
                         // .moduleName(MODULE_NAME) // 设置父包模块名
                         .entity("entity") // 设置MVC下各个模块的包名
 //                        .mapper("mapper")
-                        .mapper("dao")
+                        .mapper("mapper")
                         .service("service")
                         .serviceImpl("service.impl")
                         .controller("controller")

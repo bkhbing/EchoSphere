@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2024/3/26 0:44
  */
 @Configuration
-@MapperScan("com.bkhb.EchoSphere.dao")
+@MapperScan("com.bkhb.EchoSphere.mapper")
 public class MybatisPlusConfig {
 
     /**

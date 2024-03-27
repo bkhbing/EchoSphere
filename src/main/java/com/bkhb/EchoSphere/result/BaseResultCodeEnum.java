@@ -139,6 +139,10 @@ public enum BaseResultCodeEnum implements IResultCode, IDict<Integer> {
      */
     BLOCK_EXCEPTION(1023, "接口限流降级"),
 
+    /**
+     * 用户名或密码错误
+     */
+    USERNAME_OR_PASSWORD_ERROR(1024, "用户名或密码错误"),
     ;
 
     /**

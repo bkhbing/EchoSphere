@@ -1,5 +1,7 @@
 package com.bkhb.EchoSphere.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.execption.EntityExistException;
@@ -9,6 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -24,11 +28,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     final private IUserService userService;
 
-    @GetMapping
-    public User getUser() {
-        if (1 == 1) {
-            throw new EntityExistException(User.class, "email", "elunez@qq.com");
-        }
-        return userService.getUser(1L);
+    /**
+     * 获取当前用户信息
+     * @return
+     */
+    @SaCheckLogin
+    @GetMapping("userInfo")
+    public User userInfo() {
+        return userService.getUserInfo();
+    }
+
+    /**
+     * 获取所有用户信息
+     */
+    @SaCheckPermission("user:list")
+    @GetMapping("list")
+    public List<User> list() {
+        return userService.getUserList();
     }
 }

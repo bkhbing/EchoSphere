@@ -5,4 +5,7 @@
     <select id="getUser" resultType="com.bkhb.EchoSphere.entity.User">
         SELECT * FROM SYS_USER WHERE user_id = #{userId}
     </select>
+    <select id="getUserByEmail" resultType="com.bkhb.EchoSphere.entity.User">
+        SELECT * FROM SYS_USER WHERE email = #{username}
+    </select>
 </mapper>

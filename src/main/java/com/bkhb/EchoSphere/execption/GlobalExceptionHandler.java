@@ -1,11 +1,12 @@
 package com.bkhb.EchoSphere.execption;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
 import com.bkhb.EchoSphere.result.IResultCode;
 import com.bkhb.EchoSphere.result.ResultWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -53,7 +54,7 @@ public class GlobalExceptionHandler {
     public ResultWrapper<IResultCode> entityExistException(EntityExistException e) {
         // 打印堆栈信息
         log.error(ExceptionUtil.stacktraceToString(e));
-        return ResultWrapper.fail(BaseResultCodeEnum.RESOURCE_ALREADY_EXIST.getCode(), e.getMessage());
+        return ResultWrapper.fail(BaseResultCodeEnum.RESOURCE_ALREADY_EXIST);
     }
 
     /**
@@ -65,6 +66,30 @@ public class GlobalExceptionHandler {
     public ResultWrapper<IResultCode> entityNotFoundException(EntityNotFoundException e) {
         // 打印堆栈信息
         log.error(ExceptionUtil.stacktraceToString(e));
-        return ResultWrapper.fail(BaseResultCodeEnum.RESOURCE_NOT_FOUND.getCode(), e.getMessage());
+        return ResultWrapper.fail(BaseResultCodeEnum.RESOURCE_NOT_FOUND);
+    }
+
+    /**
+     * 处理 NotLoginException
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = NotLoginException.class)
+    public ResultWrapper<IResultCode> notLoginException(NotLoginException e) {
+        // 打印堆栈信息
+        log.error(ExceptionUtil.stacktraceToString(e));
+        return ResultWrapper.fail(BaseResultCodeEnum.TOKEN_FAIL);
+    }
+
+    /**
+     * 处理 NotPermissionException
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = NotPermissionException.class)
+    public ResultWrapper<IResultCode> notPermissionException(NotPermissionException e) {
+        // 打印堆栈信息
+        log.error(ExceptionUtil.stacktraceToString(e));
+        return ResultWrapper.fail(BaseResultCodeEnum.NO_OPERATE_PERMISSION);
     }
 }
