@@ -1,5 +1,7 @@
 package com.bkhb.EchoSphere.service;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import com.bkhb.EchoSphere.dto.UserDto;
 import com.bkhb.EchoSphere.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -20,9 +22,15 @@ public interface IUserService extends IService<User> {
 
     User getUserByUsernameOrEmail(String email);
 
-    User getUserInfo();
+    UserDto getUserInfo();
 
-    List<User> getUserList();
+    List<UserDto> getUserList();
 
     User addUser(User user);
+
+    SaTokenInfo login(UserDto userDto);
+
+    void logout();
+
+    void register(UserDto userDto);
 }

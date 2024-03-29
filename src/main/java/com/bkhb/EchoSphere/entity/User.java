@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -20,6 +21,7 @@ import lombok.experimental.Accessors;
  * @author bkhb
  * @since 2024-03-26 00:57:57
  */
+@Builder
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -49,12 +51,6 @@ public class User {
      */
     @TableField("gender")
     private String gender;
-
-    /**
-     * 手机号码
-     */
-    @TableField("phone")
-    private String phone;
 
     /**
      * 邮箱
@@ -113,25 +109,12 @@ public class User {
     /**
      * 创建日期
      */
-      @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    @TableField("update_time")
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
-
-    /**
-     * 菜单权限标识
-     */
-    @TableField(exist = false)
-    private List<String> permissionList;
-
-    /**
-     * 角色权限标识
-     */
-    @TableField(exist = false)
-    private List<String> roleList;
-
 }

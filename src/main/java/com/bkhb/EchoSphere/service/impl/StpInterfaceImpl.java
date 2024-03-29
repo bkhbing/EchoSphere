@@ -3,6 +3,7 @@ package com.bkhb.EchoSphere.service.impl;
 import cn.dev33.satoken.stp.StpInterface;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
+import com.bkhb.EchoSphere.dto.UserDto;
 import com.bkhb.EchoSphere.entity.User;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return JSONUtil.toBean(JSONUtil.toJsonStr(StpUtil.getExtra("user")), User.class).getPermissionList();
+        return JSONUtil.toBean(JSONUtil.toJsonStr(StpUtil.getExtra("user")), UserDto.class).getPermissions();
     }
 
     /**
