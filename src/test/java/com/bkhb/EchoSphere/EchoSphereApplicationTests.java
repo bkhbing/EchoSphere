@@ -1,8 +1,12 @@
 package com.bkhb.EchoSphere;
 
+import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.json.JSONUtil;
+import com.bkhb.EchoSphere.service.IPostService;
 import com.bkhb.EchoSphere.service.IUserService;
+import com.bkhb.EchoSphere.service.impl.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +17,14 @@ class EchoSphereApplicationTests {
 	@Autowired
 	private IUserService userService;
 
+	@Autowired
+	private EmailService emailService;
+
+	@Autowired
+	private IPostService postService;
+
 	@Test
 	void contextLoads() {
-		String pw_hash = BCrypt.hashpw("123456", BCrypt.gensalt());
-		System.out.println(pw_hash);
 	}
 
 }

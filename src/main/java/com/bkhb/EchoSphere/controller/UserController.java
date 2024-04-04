@@ -10,7 +10,10 @@ import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.execption.EntityExistException;
 import com.bkhb.EchoSphere.result.ResultWrapper;
 import com.bkhb.EchoSphere.service.IUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,13 +28,15 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/user")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Tag(name = "用户管理", description = "用户管理")
 public class UserController {
     final private IUserService userService;
 
     /**
      * 登陆接口
      */
+    @Operation(summary = "登陆接口", description = "登陆接口，只需要填写用户名和密码即可")
     @PostMapping("login")
     public SaTokenInfo login(@RequestBody UserDto userDto) {
         return userService.login(userDto);
@@ -40,6 +45,7 @@ public class UserController {
     /**
      * 注销登录
      */
+    @Operation(summary = "注销登录", description = "注销登录,只需要在请求头添加token即可")
     @PostMapping("logout")
     public void logout() {
         userService.logout();
@@ -48,6 +54,7 @@ public class UserController {
     /**
      * 注册
      */
+    @Operation(summary = "注册", description = "注册，只需要填写用户名和密码即可")
     @SaIgnore
     @PostMapping("register")
     public void register(@RequestBody UserDto userDto) {
@@ -57,14 +64,29 @@ public class UserController {
     /**
      * 获取当前用户信息
      */
+    @Operation(summary = "获取当前用户信息", description = "获取当前用户信息")
     @GetMapping("info")
     public UserDto userInfo() {
         return userService.getUserInfo();
     }
 
+    @Operation(summary = "更新当前用户信息", description = "更新当前用户信息")
+    @PutMapping("info")
+    public UserDto updateUserInfo(@RequestBody UserDto userDto) {
+        return userService.updateUserInfoByUserId(userDto);
+    }
+
+    @Operation(summary = "更新用户信息", description = "更新用户信息")
+    @SaCheckPermission("user:edit")
+    @PutMapping()
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+        return userService.updateUserByUserId(userDto);
+    }
+
     /**
      * 获取所有用户信息
      */
+    @Operation(summary = "获取所有用户信息", description = "获取所有用户信息")
     @SaCheckPermission("user:list")
     @GetMapping("list")
     public List<UserDto> list() {

@@ -1,6 +1,7 @@
 package com.bkhb.EchoSphere.dto;
 
 import com.bkhb.EchoSphere.entity.User;
+import com.bkhb.EchoSphere.enums.GenderEnum;
 import lombok.*;
 
 import java.io.Serializable;
@@ -30,7 +31,7 @@ public class UserDto implements Serializable {
     /**
      * 性别
      */
-    private String gender;
+    private GenderEnum gender;
 
     /**
      * 邮箱

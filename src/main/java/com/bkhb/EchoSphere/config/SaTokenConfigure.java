@@ -8,6 +8,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -33,10 +34,27 @@ public class SaTokenConfigure implements WebMvcConfigurer {
             SaRouter
                     .match("/**")    // 拦截的 path 列表，可以写多个 */
                     .notMatch("/user/login")        // 排除掉的 path 列表，可以写多个
+                    .notMatch("/static/**")
+                    .notMatch("/v3/**")
+                    .notMatch("/swagger-resources/**")
+                    .notMatch("/webjars/**")
+                    .notMatch("/doc.html")
+                    .notMatch("/favicon.ico")
                     .check(r -> StpUtil.checkLogin());        // 要执行的校验动作，可以写完整的 lambda 表达式
 
             // 根据路由划分模块，不同模块不同鉴权
 //            SaRouter.match("/system/**", r -> StpUtil.checkPermission("user"));
         })).addPathPatterns("/**");
     }
+
+    /**
+     * 静态资源映射
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("favicon.ico").addResourceLocations("classpath:/static/");
+    }
+
 }

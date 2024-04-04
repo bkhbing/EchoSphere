@@ -3,13 +3,13 @@
 <mapper namespace="com.bkhb.EchoSphere.mapper.MenuMapper">
 
     <select id="selectPermissionListByUserId" resultType="java.lang.String">
-        SELECT DISTINCT sm.permission
-        FROM sys_user su
-        JOIN sys_users_roles sur ON su.user_id = sur.user_id
-        JOIN sys_role sr ON sur.role_id = sr.role_id
-        JOIN sys_roles_menus srm ON sr.role_id = srm.role_id
-        JOIN sys_menu sm ON srm.menu_id = sm.menu_id
-        WHERE su.user_id = #{userId}
-        AND sm.permission IS NOT NULL AND sm.permission != ''
+        SELECT DISTINCT m.permission
+        FROM user u
+                 JOIN users_roles ur ON u.user_id = ur.user_id
+                 JOIN role r ON ur.role_id = r.role_id
+                 JOIN roles_menus rm ON r.role_id = rm.role_id
+                 JOIN menu m ON rm.menu_id = m.menu_id
+        WHERE u.user_id = #{userId}
+          AND m.permission IS NOT NULL AND m.permission != ''
     </select>
 </mapper>

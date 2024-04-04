@@ -7,7 +7,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://8.138.126.193:3306/echosphere?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://127.0.0.1:3306/echosphere?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 1234abcd.
       initial-size: 10
@@ -22,13 +22,28 @@ spring:
         reset-enable: false
         login-username: druid
         login-password: druid
+  mail:
+    host: smtp.qq.com  # 邮件服务器的主机名
+    port: 587               # 邮件服务器的端口
+    username: 1787626070@qq.com  # 你的邮件服务器用户名
+    password: qtjbnlkpcikdeiej      # 你的邮件服务器密码
+    protocol: smtp
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    test-connection: false
+
   data:
     # redis配置
     redis:
       # Redis数据库索引（默认为0）
       database: 1
       # Redis服务器地址
-      host: 8.138.126.193
+      host: 127.0.0.1
       # Redis服务器连接端口
       port: 6379
       # Redis服务器连接密码（默认为空）
@@ -67,3 +82,21 @@ sa-token:
   is-log: true
   # jwt秘钥
   jwt-secret-key: asdasdasifhueuiwyurfewbfjsdafjk
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.bkhb.EchoSphere.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: false
+  setting:
+    language: zh_cn
+    swagger-model-name: 实体类列表
+    enable-dynamic-parameter: true

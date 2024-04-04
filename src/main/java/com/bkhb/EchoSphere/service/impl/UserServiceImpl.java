@@ -1,9 +1,11 @@
 package com.bkhb.EchoSphere.service.impl;
 
+import cn.dev33.satoken.dao.SaTokenDao;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -41,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public User getUser(Long userId) {
-        return userMapper.getUser(userId);
+        return userMapper.selectById(userId);
     }
 
     /**
@@ -126,5 +128,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .email(userDto.getEmail())
                 .build();
         addUser(user);
+    }
+
+    @Override
+    public UserDto updateUserInfoByUserId(UserDto userDto) {
+        Long userId = StpUtil.getLoginIdAsLong();
+        User user = new User();
+        BeanUtil.copyProperties(userDto, user);
+        user.setUserId(userId);
+        // 判断用户名和邮箱是否唯一
+        if (user.getUsername() != null) {
+            if (userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getUsername, user.getUsername())) > 0) {
+                throw new EntityExistException(User.class, "username", user.getUsername());
+            }
+        }
+        if (user.getEmail() != null) {
+            if (userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail())) > 0) {
+                throw new EntityExistException(User.class, "email", user.getEmail());
+            }
+        }
+        userMapper.updateById(user);
+        UserDto newUserDto = new UserDto(userMapper.selectById(userId));
+        // 封装用户权限标识，权限认证时会用到
+        newUserDto.setPermissions(menuService.getPermissionListByUserId(userId));
+        // TODO 登陆并将用户信息存入redis
+        return newUserDto;
+    }
+
+    @Override
+    public UserDto updateUserByUserId(UserDto userDto) {
+        if (userMapper.selectById(userDto.getUserId()) == null) {
+            throw new BadRequestException(BaseResultCodeEnum.RESOURCE_NOT_FOUND);
+        }
+        User user = new User();
+        BeanUtil.copyProperties(userDto, user);
+        userMapper.updateById(user);
+        return new UserDto(userMapper.selectById(user.getUserId()));
     }
 }

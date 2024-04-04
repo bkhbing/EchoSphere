@@ -3,6 +3,7 @@ package com.bkhb.EchoSphere.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.bkhb.EchoSphere.entity.Menu;
 import com.bkhb.EchoSphere.mapper.MenuMapper;
+import com.bkhb.EchoSphere.mapper.RoleMapper;
 import com.bkhb.EchoSphere.service.IMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
     private final MenuMapper menuMapper;
+    private final RoleMapper roleMapper;
 
     @Override
     public List<String> getPermissionListByUserId(Long userId) {

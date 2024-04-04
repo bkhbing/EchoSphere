@@ -1,8 +1,10 @@
 package com.bkhb.EchoSphere.result;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -12,6 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import jakarta.servlet.ServletResponse;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +32,9 @@ import java.util.Optional;
  */
 @Configuration
 public class InitializingAdviceDecorator implements InitializingBean {
+
+    private static final List<String> ignoredUrls = List.of("/webjars/**", "/v3/**", "/swagger-resources/**");
+    private static final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     private final RequestMappingHandlerAdapter adapter;
 
@@ -93,6 +100,18 @@ public class InitializingAdviceDecorator implements InitializingBean {
          */
         @Override
         public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
+            // 获取当前请求的URL
+            String currentUrl = webRequest.getNativeRequest(HttpServletRequest.class).getRequestURI();
+
+            // 判断当前URL是否在排除列表中
+            boolean isIgnoredUrl = ignoredUrls.stream().anyMatch(ignoredUrl -> pathMatcher.match(ignoredUrl, currentUrl));
+
+            // 如果当前URL在排除列表中，直接使用原始handler处理返回值
+            if (isIgnoredUrl) {
+                handler.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
+                return;
+            }
+
             //如果是下载文件跳过包装
             IgnoredResultWrapper ignoredResultWrapper = returnType.getMethodAnnotation(IgnoredResultWrapper.class);
 

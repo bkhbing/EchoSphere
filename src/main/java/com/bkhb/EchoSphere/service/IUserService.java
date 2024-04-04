@@ -33,4 +33,8 @@ public interface IUserService extends IService<User> {
     void logout();
 
     void register(UserDto userDto);
+
+    UserDto updateUserByUserId(UserDto userDto);
+
+    UserDto updateUserInfoByUserId(UserDto userDto);
 }

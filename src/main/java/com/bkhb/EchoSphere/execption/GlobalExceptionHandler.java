@@ -11,6 +11,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 全局异常拦截
@@ -105,5 +106,17 @@ public class GlobalExceptionHandler {
         // 打印堆栈信息
         log.error(ExceptionUtil.stacktraceToString(e));
         return ResultWrapper.fail(BaseResultCodeEnum.ILLEGAL_ARGUMENT);
+    }
+
+    /**
+     * 处理 HttpMessageConversionException
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = NoResourceFoundException.class)
+    public ResultWrapper<IResultCode> noResourceFoundException(NoResourceFoundException e) {
+        // 打印堆栈信息
+        log.error(ExceptionUtil.stacktraceToString(e));
+        return ResultWrapper.fail(BaseResultCodeEnum.RESOURCE_NOT_FOUND);
     }
 }

@@ -1,16 +1,12 @@
 package com.bkhb.EchoSphere.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.bkhb.EchoSphere.enums.GenderEnum;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -25,7 +21,9 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("sys_user")
+@TableName("user")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     /**
@@ -50,7 +48,7 @@ public class User {
      * 性别
      */
     @TableField("gender")
-    private String gender;
+    private GenderEnum gender;
 
     /**
      * 邮箱

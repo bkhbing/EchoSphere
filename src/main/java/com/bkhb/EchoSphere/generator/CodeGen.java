@@ -32,10 +32,10 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.bkhb.EchoSphere";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"sys_menu", "sys_role"};
+    private static final String[] TBL_NAMES = {"comment"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
-    private static final String TABLE_PREFIX = "sys_";
+    private static final String TABLE_PREFIX = "";
     public static void main(String[] args) {
         //获取当前工程路径(这里无需修改)
         String projectPath = System.getProperty("user.dir");
@@ -90,8 +90,8 @@ public class CodeGen {
                         .service("service")
                         .serviceImpl("service.impl")
                         .controller("controller")
-                        .xml( "\\src\\main\\resources\\mapper") // 设置XML资源文件的目录
-                        .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "\\src\\main\\resources\\mapper"))// 设置XML资源文件的目录
+                        .xml( "src/main/resources/mapper") // 设置XML资源文件的目录
+                        .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "src/main/resources/mapper"))// 设置XML资源文件的目录
 
         );
 
@@ -159,7 +159,7 @@ public class CodeGen {
         fastAutoGenerator.strategyConfig(
                 strategyConfigBuilder -> strategyConfigBuilder.mapperBuilder()
                         .enableMapperAnnotation()   // 开启 @Mapper 注解
-                        .formatMapperFileName("%sDao")
+                        .formatMapperFileName("%sMapper")
                         .formatXmlFileName("%sMapper"));
 
 

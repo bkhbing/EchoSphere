@@ -21,7 +21,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-@TableName("sys_menu")
+@TableName("menu")
 public class Menu {
 
     /**
