@@ -24,7 +24,7 @@ import java.util.Collections;
  */
 public class CodeGen {
     // 数据库连接字段配置
-    private static final String JDBC_URL = "jdbc:mysql://8.138.126.193:3306/echosphere?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
+    private static final String JDBC_URL = "jdbc:mysql://127.0.0.1:3306/echosphere?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true";
     private static final String JDBC_USER_NAME = "root";
     private static final String JDBC_PASSWORD = "1234abcd.";
 
@@ -32,7 +32,7 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.bkhb.EchoSphere";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"comment"};
+    private static final String[] TBL_NAMES = {"praise"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
     private static final String TABLE_PREFIX = "";
@@ -90,7 +90,7 @@ public class CodeGen {
                         .service("service")
                         .serviceImpl("service.impl")
                         .controller("controller")
-                        .xml( "src/main/resources/mapper") // 设置XML资源文件的目录
+//                        .xml( "src/main/resources/mapper") // 设置XML资源文件的目录
                         .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "src/main/resources/mapper"))// 设置XML资源文件的目录
 
         );

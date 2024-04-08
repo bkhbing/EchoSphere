@@ -7,13 +7,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bkhb.EchoSphere.dto.PageDto;
 import com.bkhb.EchoSphere.dto.PostDto;
 import com.bkhb.EchoSphere.entity.Post;
+import com.bkhb.EchoSphere.entity.Praise;
 import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.PostMapper;
+import com.bkhb.EchoSphere.mapper.PraiseMapper;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
 import com.bkhb.EchoSphere.service.ICommentService;
 import com.bkhb.EchoSphere.service.IPostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bkhb.EchoSphere.service.IPraiseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +36,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
 
     private final PostMapper postMapper;
     private final ICommentService commentService;
+    private final PraiseMapper praiseMapper;
 
     @Override
     public Post addPost(Post post) {
         post.setUserId(StpUtil.getLoginIdAsLong());
         save(post);
-        return getById(post.getId());
+        return getById(post.getPostId());
     }
 
     @Override
@@ -54,7 +58,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
     @Override
     public PostDto getPostById(Long postId) {
         LambdaQueryWrapper<Post> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Post::getId, postId).eq(Post::getStatus, true).eq(Post::getStatus, true);
+        queryWrapper.eq(Post::getPostId, postId).eq(Post::getStatus, true).eq(Post::getStatus, true);
         Post post = postMapper.selectOne(queryWrapper);
         // 浏览量加一
         if (post == null) {
@@ -74,7 +78,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
     @Override
     public Post updatePostById(Post post) {
         // 判断帖子id是否正确
-        Post oldPost = postMapper.selectById(post.getId());
+        Post oldPost = postMapper.selectById(post.getPostId());
         if (oldPost == null){
             throw new BadRequestException(BaseResultCodeEnum.RESOURCE_NOT_FOUND);
         }
@@ -83,7 +87,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
             throw new BadRequestException(BaseResultCodeEnum.NO_OPERATE_PERMISSION);
         }
         postMapper.updateById(post);
-        return postMapper.selectById(post.getId());
+        return postMapper.selectById(post.getPostId());
     }
 
     @Override

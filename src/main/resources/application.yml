@@ -82,6 +82,8 @@ sa-token:
   is-log: true
   # jwt秘钥
   jwt-secret-key: asdasdasifhueuiwyurfewbfjsdafjk
+  # token写到header
+  isWriteHeader: true
 
 # springdoc-openapi项目配置
 springdoc:

@@ -25,7 +25,9 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return JSONUtil.toBean(JSONUtil.toJsonStr(StpUtil.getExtra("user")), UserDto.class).getPermissions();
+        // 从Session中获取usr信息
+        UserDto userDto = (UserDto) StpUtil.getSession().get("userDto");
+        return userDto.getPermissions();
     }
 
     /**

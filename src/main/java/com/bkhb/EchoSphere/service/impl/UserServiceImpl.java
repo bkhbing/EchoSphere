@@ -60,7 +60,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public UserDto getUserInfo() {
-        return JSONUtil.toBean(JSONUtil.toJsonStr(StpUtil.getExtra("user")), UserDto.class);
+        // 从Session中获取usr信息
+        return (UserDto) StpUtil.getSession().get("userDto");
     }
 
     @Override
@@ -103,7 +104,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 封装用户权限标识，权限认证时会用到
         newUserDto.setPermissions(menuService.getPermissionListByUserId(user.getUserId()));
         // 登陆，并将用户信息存入redis
-        StpUtil.login(user.getUserId(), SaLoginConfig.setExtra("user", newUserDto));
+//        StpUtil.login(user.getUserId(), SaLoginConfig.setExtra("user", newUserDto));
+        StpUtil.login(user.getUserId());
+        // 在登录时缓存 user 对象
+        StpUtil.getSession().set("userDto", newUserDto);
         return StpUtil.getTokenInfo();
     }
 
@@ -152,6 +156,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 封装用户权限标识，权限认证时会用到
         newUserDto.setPermissions(menuService.getPermissionListByUserId(userId));
         // TODO 登陆并将用户信息存入redis
+        StpUtil.getSession().set("userDto", newUserDto);
         return newUserDto;
     }
 

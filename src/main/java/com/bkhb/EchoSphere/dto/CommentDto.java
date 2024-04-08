@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentDto {
-    private Long id;
+    private Long commentId;
 
     /**
      * 发布评论用户的ID
@@ -68,7 +68,7 @@ public class CommentDto {
         if (comment == null) {
             return;
         }
-        this.id = comment.getId();
+        this.commentId = comment.getCommentId();
         this.userId = comment.getUserId();
         this.targetId = comment.getTargetId();
         this.entityType = comment.getEntityType();

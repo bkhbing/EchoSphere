@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostDto {
-    private Long id;
+    private Long postId;
 
     /**
      * 发布用户的ID
@@ -72,7 +72,7 @@ public class PostDto {
     private List<CommentDto> replyDtoList;
 
     public PostDto(Post post) {
-        this.id = post.getId();
+        this.postId = post.getPostId();
         this.userId = post.getUserId();
         this.title = post.getTitle();
         this.content = post.getContent();

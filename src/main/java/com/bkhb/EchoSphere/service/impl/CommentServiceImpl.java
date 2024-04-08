@@ -47,11 +47,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentDto> commentDtoList = new ArrayList<>();
         getCommentDtoListByPostId(postId).forEach(commentDto -> {
             LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(Comment::getEntityId, commentDto.getId()).eq(Comment::getEntityType, 1).eq(Comment::getStatus, true);
+            queryWrapper.eq(Comment::getEntityId, commentDto.getCommentId()).eq(Comment::getEntityType, 1).eq(Comment::getStatus, true);
             commentDtoList.addAll(commentMapper.selectList(queryWrapper).stream().map(comment -> {
                 CommentDto commentDto1 = new CommentDto(comment);
                 commentDto1.setTargetNickName(userMapper.selectById(comment.getTargetId()).getNickName());
-                commentDto1.setUserNickName(userMapper.selectById(comment.getTargetId()).getNickName());
+                commentDto1.setUserNickName(userMapper.selectById(comment.getUserId()).getNickName());
                 return commentDto1;
             }).toList());
         });
@@ -74,13 +74,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 判断帖子或者评论是否存在
         if (comment.getEntityType() == 0) {
             LambdaQueryWrapper<Post> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(Post::getId, comment.getEntityId()).eq(Post::getStatus, true);
+            queryWrapper.eq(Post::getPostId, comment.getEntityId()).eq(Post::getStatus, true);
             if (postMapper.selectOne(queryWrapper) == null) {
                 throw new BadRequestException(BaseResultCodeEnum.BAD_REQUEST);
             }
         } else if (comment.getEntityType() == 1) {
             LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(Comment::getId, comment.getEntityId()).eq(Comment::getStatus, true).eq(Comment::getEntityType, 0);
+            queryWrapper.eq(Comment::getCommentId, comment.getEntityId()).eq(Comment::getStatus, true).eq(Comment::getEntityType, 0);
             if (commentMapper.selectOne(queryWrapper) == null) {
                 throw new BadRequestException(BaseResultCodeEnum.BAD_REQUEST);
             }
@@ -103,7 +103,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public void delCommentById(Long commentId) {
         Long userId = StpUtil.getLoginIdAsLong();
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getId, commentId).eq(Comment::getUserId, userId);
+        queryWrapper.eq(Comment::getCommentId, commentId).eq(Comment::getUserId, userId);
         if (commentMapper.selectOne(queryWrapper) == null) {
             throw new BadRequestException(BaseResultCodeEnum.NO_OPERATE_PERMISSION);
         }

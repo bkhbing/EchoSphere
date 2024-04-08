@@ -24,8 +24,8 @@ import lombok.experimental.Accessors;
 @TableName("comment")
 public class Comment {
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "comment_id", type = IdType.AUTO)
+    private Long commentId;
 
     /**
      * 发布评论用户的ID

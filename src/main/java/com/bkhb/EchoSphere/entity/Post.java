@@ -27,8 +27,8 @@ import lombok.experimental.Accessors;
 @TableName("post")
 public class Post {
 
-      @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    @TableId(value = "post_id", type = IdType.AUTO)
+    private Long postId;
 
     /**
      * 发布用户的ID

@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.bkhb.EchoSphere.dto.PageDto;
 import com.bkhb.EchoSphere.dto.PostDto;
 import com.bkhb.EchoSphere.entity.Post;
+import com.bkhb.EchoSphere.result.ResultWrapper;
 import com.bkhb.EchoSphere.service.IPostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +32,7 @@ public class PostController {
 
     @Operation(summary = "添加帖子", description = "添加帖子")
     @PostMapping
-    public Post add(@RequestBody Post post) {
+    public Post addPost(@RequestBody Post post) {
         return postService.addPost(post);
     }
 
@@ -51,7 +52,7 @@ public class PostController {
     @Operation(summary = "修改帖子", description = "根据ID修改帖子")
     @PutMapping("{postId}")
     public Post edit(@PathVariable Long postId, @RequestBody Post post) {
-        post.setId(postId);
+        post.setPostId(postId);
         return postService.updatePostById(post);
     }
 
@@ -79,5 +80,4 @@ public class PostController {
     public List<Post> list() {
         return postService.getPostByUserId(StpUtil.getLoginIdAsLong());
     }
-
 }

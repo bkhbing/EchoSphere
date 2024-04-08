@@ -33,33 +33,33 @@ import java.util.List;
 public class UserController {
     final private IUserService userService;
 
-    /**
-     * 登陆接口
-     */
-    @Operation(summary = "登陆接口", description = "登陆接口，只需要填写用户名和密码即可")
-    @PostMapping("login")
-    public SaTokenInfo login(@RequestBody UserDto userDto) {
-        return userService.login(userDto);
-    }
-
-    /**
-     * 注销登录
-     */
-    @Operation(summary = "注销登录", description = "注销登录,只需要在请求头添加token即可")
-    @PostMapping("logout")
-    public void logout() {
-        userService.logout();
-    }
-
-    /**
-     * 注册
-     */
-    @Operation(summary = "注册", description = "注册，只需要填写用户名和密码即可")
-    @SaIgnore
-    @PostMapping("register")
-    public void register(@RequestBody UserDto userDto) {
-        userService.register(userDto);
-    }
+//    /**
+//     * 登陆接口
+//     */
+//    @Operation(summary = "登陆接口", description = "登陆接口，只需要填写用户名和密码即可")
+//    @PostMapping("login")
+//    public SaTokenInfo login(@RequestBody UserDto userDto) {
+//        return userService.login(userDto);
+//    }
+//
+//    /**
+//     * 注销登录
+//     */
+//    @Operation(summary = "注销登录", description = "注销登录,只需要在请求头添加token即可")
+//    @PostMapping("logout")
+//    public void logout() {
+//        userService.logout();
+//    }
+//
+//    /**
+//     * 注册
+//     */
+//    @Operation(summary = "注册", description = "注册，只需要填写用户名和密码即可")
+//    @SaIgnore
+//    @PostMapping("register")
+//    public void register(@RequestBody UserDto userDto) {
+//        userService.register(userDto);
+//    }
 
     /**
      * 获取当前用户信息
