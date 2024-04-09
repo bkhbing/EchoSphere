@@ -32,7 +32,7 @@ public class CodeGen {
     private static final String PACKAGE_NAME = "com.bkhb.EchoSphere";
 
     // 表名,多个表使用英文逗号分割
-    private static final String[] TBL_NAMES = {"praise"};
+    private static final String[] TBL_NAMES = {"chat"};
 
     // 表名的前缀,从表生成代码时会去掉前缀
     private static final String TABLE_PREFIX = "";
@@ -90,7 +90,7 @@ public class CodeGen {
                         .service("service")
                         .serviceImpl("service.impl")
                         .controller("controller")
-//                        .xml( "src/main/resources/mapper") // 设置XML资源文件的目录
+                        .xml( "src/main/resources/mapper") // 设置XML资源文件的目录
                         .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "src/main/resources/mapper"))// 设置XML资源文件的目录
 
         );

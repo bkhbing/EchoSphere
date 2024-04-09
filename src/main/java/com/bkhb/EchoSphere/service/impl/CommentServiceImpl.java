@@ -62,7 +62,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public Integer getCommentCountByPostId(Long postId) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Comment::getEntityId, postId).eq(Comment::getStatus, true);
-        return list(queryWrapper).size();
+        return Math.toIntExact(commentMapper.selectCount(queryWrapper));
     }
 
     @Override

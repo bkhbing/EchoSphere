@@ -1,5 +1,7 @@
 package com.bkhb.EchoSphere.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.bkhb.EchoSphere.entity.Comment;
 import com.bkhb.EchoSphere.entity.Post;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,5 +16,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PostMapper extends BaseMapper<Post> {
-
 }

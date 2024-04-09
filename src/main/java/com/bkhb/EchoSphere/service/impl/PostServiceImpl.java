@@ -71,7 +71,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
         PostDto postDto = new PostDto(post);
         postDto.setCommentDtoList(commentService.getCommentDtoListByPostId(postId));
         postDto.setReplyDtoList(commentService.getReplyDtoListByPostId(postId));
-        postDto.setCommentCount(commentService.getCommentCountByPostId(postId));
+        postDto.setCommentCount(postDto.getCommentDtoList().size() + postDto.getReplyDtoList().size());
+        postDto.setLikeCount(Math.toIntExact(praiseMapper.selectCount(new LambdaQueryWrapper<Praise>().eq(Praise::getPostId, postId))));
         return postDto;
     }
 
