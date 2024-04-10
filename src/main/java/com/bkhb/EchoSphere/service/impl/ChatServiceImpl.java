@@ -8,7 +8,6 @@ import com.bkhb.EchoSphere.entity.Message;
 import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.ChatMapper;
-import com.bkhb.EchoSphere.mapper.MenuMapper;
 import com.bkhb.EchoSphere.mapper.MessageMapper;
 import com.bkhb.EchoSphere.mapper.UserMapper;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * <p>
