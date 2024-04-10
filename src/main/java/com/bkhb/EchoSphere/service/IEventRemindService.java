@@ -1,7 +1,10 @@
 package com.bkhb.EchoSphere.service;
 
+import com.bkhb.EchoSphere.dto.EventRemindDto;
 import com.bkhb.EchoSphere.entity.EventRemind;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IEventRemindService extends IService<EventRemind> {
 
+    List<EventRemindDto> getPraiseList();
+
+    String getUrl(Long eventRemindId);
 }

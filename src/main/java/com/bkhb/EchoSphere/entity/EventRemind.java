@@ -34,7 +34,7 @@ public class EventRemind {
      * 动作类型，如0=评论、1=点赞
      */
     @TableField("`action`")
-    private Boolean action;
+    private Integer action;
 
     /**
      * 事件源 ID，如评论 ID、文章 ID 等

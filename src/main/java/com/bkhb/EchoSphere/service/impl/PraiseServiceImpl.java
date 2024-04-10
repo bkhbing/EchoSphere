@@ -2,12 +2,10 @@ package com.bkhb.EchoSphere.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.bkhb.EchoSphere.entity.Comment;
-import com.bkhb.EchoSphere.entity.Post;
-import com.bkhb.EchoSphere.entity.Praise;
-import com.bkhb.EchoSphere.entity.User;
+import com.bkhb.EchoSphere.entity.*;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.CommentMapper;
+import com.bkhb.EchoSphere.mapper.EventRemindMapper;
 import com.bkhb.EchoSphere.mapper.PostMapper;
 import com.bkhb.EchoSphere.mapper.PraiseMapper;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
@@ -30,6 +28,7 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
     private final PraiseMapper praiseMapper;
     private final PostMapper postMapper;
     private final CommentMapper commentMapper;
+    private final EventRemindMapper eventRemindMapper;
 
     // 通过帖子ID点赞
     @Override
@@ -64,6 +63,17 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
         praise.setUserId(userId);
         praise.setPostId(postId);
         save(praise);
+
+        // 添加点赞消息提醒
+        EventRemind eventRemind = new EventRemind();
+        eventRemind.setAction(1);
+        eventRemind.setUrl("/post/" + postId);
+        eventRemind.setSenderId(userId);
+        eventRemind.setRecipientId(post.getUserId());
+        eventRemind.setSourceId(postId);
+        eventRemind.setSourceType("Post");
+        eventRemind.setSourceContent(post.getTitle());
+        eventRemindMapper.insert(eventRemind);
     }
 
     // 通过帖子ID取消点赞
@@ -114,6 +124,17 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
         praise.setUserId(userId);
         praise.setCommentId(commentId);
         save(praise);
+
+        // 添加点赞消息提醒
+        EventRemind eventRemind = new EventRemind();
+        eventRemind.setAction(1);
+        eventRemind.setUrl("/comment/" + commentId);
+        eventRemind.setSenderId(userId);
+        eventRemind.setRecipientId(comment.getTargetId());
+        eventRemind.setSourceId(commentId);
+        eventRemind.setSourceType("Comment");
+        eventRemind.setSourceContent(comment.getContent());
+        eventRemindMapper.insert(eventRemind);
     }
 
     // 通过评论ID取消点赞
@@ -128,6 +149,30 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
                 .eq(Praise::getUserId, userId);
         if (!remove(praiseLambdaQueryWrapper)) {
             throw new BadRequestException(BaseResultCodeEnum.ILLEGAL_ARGUMENT);
+        }
+    }
+
+    @Override
+    public void addPraise(Praise praise) {
+        // 判断点赞类型
+        if (praise.getCommentId() != null && praise.getPostId() == null) {
+            addPraiseByCommentId(praise.getCommentId());
+        } else if (praise.getCommentId() == null && praise.getPostId() != null) {
+            addPraiseByPostId(praise.getPostId());
+        } else {
+            throw new BadRequestException(BaseResultCodeEnum.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public void delPraise(Praise praise) {
+        // 判断点赞类型
+        if (praise.getCommentId() != null && praise.getPostId() == null) {
+            delPraiseByCommentId(praise.getCommentId());
+        } else if (praise.getCommentId() == null && praise.getPostId() != null) {
+            delPraiseByPostId(praise.getPostId());
+        } else {
+            throw new BadRequestException(BaseResultCodeEnum.BAD_REQUEST);
         }
     }
 

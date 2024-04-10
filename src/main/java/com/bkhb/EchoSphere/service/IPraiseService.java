@@ -20,4 +20,8 @@ public interface IPraiseService extends IService<Praise> {
     void addPraiseByCommentId(Long commentId);
 
     void delPraiseByCommentId(Long commentId);
+
+    void addPraise(Praise praise);
+
+    void delPraise(Praise praise);
 }
