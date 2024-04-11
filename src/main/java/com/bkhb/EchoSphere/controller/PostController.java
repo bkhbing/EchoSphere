@@ -6,7 +6,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.bkhb.EchoSphere.dto.PageDto;
 import com.bkhb.EchoSphere.dto.PostDto;
 import com.bkhb.EchoSphere.entity.Post;
-import com.bkhb.EchoSphere.result.ResultWrapper;
 import com.bkhb.EchoSphere.service.IPostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +31,9 @@ public class PostController {
 
     @Operation(summary = "添加帖子", description = "添加帖子")
     @PostMapping
-    public Post addPost(@RequestBody Post post) {
-        return postService.addPost(post);
+    public void addPost(@RequestBody Post post) {
+        post.setUserId(StpUtil.getLoginIdAsLong());
+        postService.addPostAsync(post);
     }
 
     @Operation(summary = "查询所有帖子", description = "分页查询帖子")

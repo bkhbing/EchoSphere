@@ -25,6 +25,7 @@ class EchoSphereApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println(BCrypt.hashpw("123456", BCrypt.gensalt()));
 	}
 
 }

@@ -10,6 +10,9 @@ import cn.hutool.json.JSON;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bkhb.EchoSphere.dto.PageDto;
 import com.bkhb.EchoSphere.dto.UserDto;
 import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.execption.BadRequestException;
@@ -21,9 +24,11 @@ import com.bkhb.EchoSphere.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -80,6 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 || userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getEmail, user.getEmail())) > 0) {
             throw new BadRequestException("用户名或者邮箱已经存在");
         }
+        user.setUserId(null);
         user.setPassword(BCrypt.hashpw(user.getPassword()));
         userMapper.insert(user);
         return user;
@@ -161,13 +167,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
+    public PageDto<User> getUserPageDtoList(Integer current, Integer pageSize, String username) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        if (username != null && !username.isEmpty()) {
+            queryWrapper.like(User::getUsername, username).or()
+                    .like(User::getEmail, username).or()
+                    .like(User::getNickName, username);
+        }
+        IPage<User> page = new Page<>(current, pageSize);
+        IPage<User> userIPage = userMapper.selectPage(page, queryWrapper);
+
+        return new PageDto<User>(userIPage);
+    }
+
+    @Override
+    public void delUserByUserId(Long userId) {
+        if (userMapper.selectById(userId) == null) {
+            throw new BadRequestException(BaseResultCodeEnum.RESOURCE_NOT_FOUND);
+        }
+        userMapper.deleteById(userId);
+    }
+
+    @Override
     public UserDto updateUserByUserId(UserDto userDto) {
         if (userMapper.selectById(userDto.getUserId()) == null) {
             throw new BadRequestException(BaseResultCodeEnum.RESOURCE_NOT_FOUND);
         }
+        if (userDto.getPassword() != null) {
+            userDto.setPassword(BCrypt.hashpw(userDto.getPassword()));
+        }
         User user = new User();
         BeanUtil.copyProperties(userDto, user);
         userMapper.updateById(user);
+        StpUtil.getSession().set("userDto", userDto);
         return new UserDto(userMapper.selectById(user.getUserId()));
     }
 }

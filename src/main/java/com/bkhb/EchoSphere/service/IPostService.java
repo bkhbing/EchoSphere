@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface IPostService extends IService<Post> {
 
-    Post addPost(Post post);
+    void addPost(Post post);
 
     PageDto<Post> selectPageAll(Long current, Integer pageSize);
 
@@ -32,4 +32,6 @@ public interface IPostService extends IService<Post> {
     List<Post> findPostByTitleOrContent(String query);
 
     List<Post> getPostByUserId(long loginIdAsLong);
+
+    void addPostAsync(Post post);
 }

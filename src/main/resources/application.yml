@@ -102,3 +102,9 @@ knife4j:
     language: zh_cn
     swagger-model-name: 实体类列表
     enable-dynamic-parameter: true
+
+qiniu:
+  accessKey: eSm6mvXRxN-YXWmNW8Mnygq7R47Mh3myTDq6gX6t
+  accessSecretKey: Uoruvt1d--E6CzVBuwS6MwqA1Ll4fYrmSK4QXXsF
+  bucket: echosphere
+  imageUrl: http://sbqeikj5b.hn-bkt.clouddn.com

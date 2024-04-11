@@ -1,7 +1,6 @@
 package com.bkhb.EchoSphere.controller;
 
 import com.bkhb.EchoSphere.entity.Praise;
-import com.bkhb.EchoSphere.service.IPostService;
 import com.bkhb.EchoSphere.service.IPraiseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

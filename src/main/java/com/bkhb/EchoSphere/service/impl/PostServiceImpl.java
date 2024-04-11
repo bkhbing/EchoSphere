@@ -4,20 +4,19 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bkhb.EchoSphere.dto.PageDto;
 import com.bkhb.EchoSphere.dto.PostDto;
 import com.bkhb.EchoSphere.entity.Post;
 import com.bkhb.EchoSphere.entity.Praise;
-import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.PostMapper;
 import com.bkhb.EchoSphere.mapper.PraiseMapper;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
 import com.bkhb.EchoSphere.service.ICommentService;
 import com.bkhb.EchoSphere.service.IPostService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bkhb.EchoSphere.service.IPraiseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,10 +38,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements IP
     private final PraiseMapper praiseMapper;
 
     @Override
-    public Post addPost(Post post) {
-        post.setUserId(StpUtil.getLoginIdAsLong());
+    public void addPost(Post post) {
         save(post);
-        return getById(post.getPostId());
+    }
+
+    @Async
+    @Override
+    public void addPostAsync(Post post) {
+        addPost(post);
     }
 
     @Override

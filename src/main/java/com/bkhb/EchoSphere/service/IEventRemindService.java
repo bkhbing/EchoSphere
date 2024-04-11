@@ -19,4 +19,8 @@ public interface IEventRemindService extends IService<EventRemind> {
     List<EventRemindDto> getPraiseList();
 
     String getUrl(Long eventRemindId);
+
+    void addEventRemind(EventRemind eventRemind);
+
+    void addEventRemindAsync(EventRemind eventRemind);
 }

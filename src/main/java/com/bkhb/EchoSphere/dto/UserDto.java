@@ -2,6 +2,8 @@ package com.bkhb.EchoSphere.dto;
 
 import com.bkhb.EchoSphere.entity.User;
 import com.bkhb.EchoSphere.enums.GenderEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;
@@ -51,6 +53,7 @@ public class UserDto implements Serializable {
     /**
      * 密码
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     /**

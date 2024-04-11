@@ -11,7 +11,9 @@ import com.bkhb.EchoSphere.mapper.UserMapper;
 import com.bkhb.EchoSphere.service.IEventRemindService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -63,5 +65,17 @@ public class EventRemindServiceImpl extends ServiceImpl<EventRemindMapper, Event
         eventRemind.setStatus(true);
         eventRemindMapper.updateById(eventRemind);
         return eventRemind.getUrl();
+    }
+
+    @Override
+    public void addEventRemind(EventRemind eventRemind) {
+        eventRemind.setSourceContent(HtmlUtils.htmlEscape(eventRemind.getSourceContent()));
+        eventRemindMapper.insert(eventRemind);
+    }
+
+    @Async
+    @Override
+    public void addEventRemindAsync(EventRemind eventRemind) {
+        addEventRemind(eventRemind);
     }
 }

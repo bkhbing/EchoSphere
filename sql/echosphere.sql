@@ -147,11 +147,95 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `praise`;
 CREATE TABLE `praise` (
-                        `praise_id` BIGINT NOT NULL AUTO_INCREMENT,
-                        `user_id` BIGINT NOT NULL COMMENT '点赞用户的ID',
-                        `post_id` BIGINT DEFAULT NULL COMMENT '被点赞的帖子ID，与comment_id互斥',
-                        `comment_id` BIGINT DEFAULT NULL COMMENT '被点赞的评论ID，与post_id互斥',
-                        `create_time` DATETIME NOT NULL COMMENT '点赞时间',
-                        PRIMARY KEY (`praise_id`),
-                        UNIQUE KEY `unique_like` (`user_id`, `post_id`, `comment_id`) COMMENT '保证用户对同一帖子或评论只能点赞一次'
+                          `praise_id` BIGINT NOT NULL AUTO_INCREMENT,
+                          `user_id` BIGINT NOT NULL COMMENT '点赞用户的ID',
+                          `post_id` BIGINT DEFAULT NULL COMMENT '被点赞的帖子ID，与comment_id互斥',
+                          `comment_id` BIGINT DEFAULT NULL COMMENT '被点赞的评论ID，与post_id互斥',
+                          `create_time` DATETIME NOT NULL COMMENT '点赞时间',
+                          PRIMARY KEY (`praise_id`),
+                          UNIQUE KEY `unique_like` (`user_id`, `post_id`, `comment_id`) COMMENT '保证用户对同一帖子或评论只能点赞一次'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='点赞信息表';
+
+-- ----------------------------
+-- Table structure for message
+-- ----------------------------
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message` (
+                           `message_id` bigint NOT NULL AUTO_INCREMENT COMMENT '私信ID',
+                           `sender_id` bigint NOT NULL COMMENT '发送者用户ID',
+                           `receiver_id` bigint NOT NULL COMMENT '接收者用户ID',
+                           `content` text NOT NULL COMMENT '消息内容',
+                           `status` TINYINT(1) DEFAULT 0 COMMENT '消息状态（0: 未读, 1: 已读）',
+                           `sender_remove` TINYINT(1) DEFAULT 0 COMMENT '发送人是否删除（0: 否, 1: 是）',
+                           `receiver_remove` TINYINT(1) DEFAULT 0 COMMENT '接受人是否删除（0: 否, 1: 是）',
+                           `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '发送时间',
+                           PRIMARY KEY (`message_id`),
+                           KEY `idx_sender_id` (`sender_id`),
+                           KEY `idx_receiver_id` (`receiver_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='私信表';
+
+INSERT INTO `message` (`sender_id`, `receiver_id`, `content`, `status`, `sender_remove`, `receiver_remove`, `create_time`)
+VALUES
+    (1, 2, '你好，很高兴认识你！', 0, 0, 0, NOW()),
+    (2, 1, '我也很高兴认识你！', 0, 0, 0, NOW()),
+    (1, 2, '最近怎么样？', 1, 0, 0, NOW()),
+    (2, 1, '我很好，你呢？', 1, 0, 0, NOW()),
+    (1, 2, '我也不错。', 1, 0, 0, NOW()),
+    (2, 1, '有空一起出来玩啊。', 0, 0, 0, NOW()),
+    (1, 2, '好的，这个周末吧。', 0, 0, 0, NOW()),
+    (1, 2, '这条消息我会删除的。', 1, 1, 0, NOW()),
+    (2, 1, '这条消息接收者会删除。', 1, 0, 1, NOW());
+
+
+-- ----------------------------
+-- Table structure for chat
+-- ----------------------------
+DROP TABLE IF EXISTS `chat`;
+CREATE TABLE `chat` (
+                        `chat_id` bigint NOT NULL AUTO_INCREMENT COMMENT '聊天室ID',
+                        `user1_id` bigint NOT NULL COMMENT '用户ID',
+                        `user2_id` bigint NOT NULL COMMENT '用户ID',
+                        `last_message` text NOT NULL COMMENT '最后一条消息的内容',
+                        `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                        PRIMARY KEY (`chat_id`),
+                        KEY `idx_user1_id` (`user1_id`),
+                        KEY `idx_user2_id` (`user2_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='聊天室表';
+
+# INSERT INTO `chat` (`user1_id`, `user2_id`, `create_time`)
+# VALUES
+#   (1, 2,NOW());
+
+-- ----------------------------
+-- Table structure for event_remind
+-- ----------------------------
+DROP TABLE IF EXISTS `event_remind`;
+CREATE TABLE `event_remind` (
+                                `event_remind_id` bigint NOT NULL AUTO_INCREMENT COMMENT '消息 ID',
+                                `action` TINYINT(1) NOT NULL COMMENT '动作类型，如0=评论、1=点赞',
+                                `source_id` bigint NOT NULL COMMENT '事件源 ID，如评论 ID、文章 ID 等',
+                                `source_type` varchar(20) NOT NULL COMMENT '事件源类型："Comment"、"Post"等',
+                                `source_content` text not null COMMENT '事件源的内容，比如回复的内容，回复的评论等等',
+                                `url` varchar(20) default NULL COMMENT '事件所发生的地点链接 url',
+                                `status` TINYINT(1) DEFAULT 0 COMMENT '消息状态（0: 未读, 1: 已读）',
+                                `sender_id` bigint NOT NULL COMMENT '操作者的 ID，即谁关注了你，at 了你',
+                                `recipient_id` bigint NOT NULL COMMENT '接受通知的用户的 ID',
+                                `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                PRIMARY KEY (`event_remind_id`),
+                                KEY `idx_sender_id` (`sender_id`),
+                                KEY `idx_recipient_id` (`recipient_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='事件提醒表';
+
+INSERT INTO `event_remind` (`action`, `source_id`, `source_type`, `source_content`, `url`, `status`, `sender_id`, `recipient_id`, `create_time`)
+VALUES
+    (0, 1, 'Post', '这是一篇很棒的文章！', '/posts/1', 0, 1, 2, NOW()),
+    (1, 1, 'Post', '为你的文章点赞了！', '/posts/1', 0, 2, 1, NOW()),
+    (0, 2, 'Comment', '非常同意你的观点！', '/posts/1/comments/2', 0, 2, 1, NOW()),
+    (1, 2, 'Comment', '为你的评论点赞了！', '/posts/1/comments/2', 0, 1, 2, NOW()),
+    (0, 3, 'Post', '这篇文章写得真好。', '/posts/3', 0, 2, 1, NOW()),
+    (1, 3, 'Post', '为你的文章点赞了！', '/posts/3', 0, 1, 2, NOW()),
+    (0, 4, 'Comment', '这个观点我很赞同。', '/posts/2/comments/4', 0, 1, 2, NOW()),
+    (1, 4, 'Comment', '为你的评论点赞了！', '/posts/2/comments/4', 0, 2, 1, NOW()),
+    (0, 5, 'Post', '文章写得不错，学到了很多。', '/posts/5', 0, 1, 2, NOW()),
+    (1, 5, 'Post', '为你的文章点赞了！', '/posts/5', 0, 2, 1, NOW());
+

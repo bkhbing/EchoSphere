@@ -2,15 +2,19 @@ package com.bkhb.EchoSphere.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.bkhb.EchoSphere.entity.*;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.bkhb.EchoSphere.entity.Comment;
+import com.bkhb.EchoSphere.entity.EventRemind;
+import com.bkhb.EchoSphere.entity.Post;
+import com.bkhb.EchoSphere.entity.Praise;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.CommentMapper;
 import com.bkhb.EchoSphere.mapper.EventRemindMapper;
 import com.bkhb.EchoSphere.mapper.PostMapper;
 import com.bkhb.EchoSphere.mapper.PraiseMapper;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
+import com.bkhb.EchoSphere.service.IEventRemindService;
 import com.bkhb.EchoSphere.service.IPraiseService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +33,7 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
     private final PostMapper postMapper;
     private final CommentMapper commentMapper;
     private final EventRemindMapper eventRemindMapper;
+    private final IEventRemindService eventRemindService;
 
     // 通过帖子ID点赞
     @Override
@@ -73,7 +78,7 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
         eventRemind.setSourceId(postId);
         eventRemind.setSourceType("Post");
         eventRemind.setSourceContent(post.getTitle());
-        eventRemindMapper.insert(eventRemind);
+        eventRemindService.addEventRemindAsync(eventRemind);
     }
 
     // 通过帖子ID取消点赞
@@ -134,7 +139,7 @@ public class PraiseServiceImpl extends ServiceImpl<PraiseMapper, Praise> impleme
         eventRemind.setSourceId(commentId);
         eventRemind.setSourceType("Comment");
         eventRemind.setSourceContent(comment.getContent());
-        eventRemindMapper.insert(eventRemind);
+        eventRemindService.addEventRemindAsync(eventRemind);
     }
 
     // 通过评论ID取消点赞

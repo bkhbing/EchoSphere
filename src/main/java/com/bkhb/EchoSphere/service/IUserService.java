@@ -1,6 +1,7 @@
 package com.bkhb.EchoSphere.service;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
+import com.bkhb.EchoSphere.dto.PageDto;
 import com.bkhb.EchoSphere.dto.UserDto;
 import com.bkhb.EchoSphere.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -37,4 +38,8 @@ public interface IUserService extends IService<User> {
     UserDto updateUserByUserId(UserDto userDto);
 
     UserDto updateUserInfoByUserId(UserDto userDto);
+
+    PageDto<User> getUserPageDtoList(Integer current, Integer pageSize, String username);
+
+    void delUserByUserId(Long userId);
 }

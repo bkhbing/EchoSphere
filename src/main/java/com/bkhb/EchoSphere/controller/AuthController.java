@@ -25,6 +25,7 @@ public class AuthController {
     final private IUserService userService;
 
     @Operation(summary = "登陆接口", description = "登陆接口，只需要填写用户名和密码即可")
+    @SaIgnore
     @PostMapping("login")
     public SaTokenInfo login(@RequestBody UserDto userDto) {
         return userService.login(userDto);

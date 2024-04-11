@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.bkhb.EchoSphere.enums.GenderEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -71,6 +73,7 @@ public class User {
     /**
      * 密码
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @TableField("password")
     private String password;
 

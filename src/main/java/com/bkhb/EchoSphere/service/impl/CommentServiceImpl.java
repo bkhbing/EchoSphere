@@ -3,20 +3,18 @@ package com.bkhb.EchoSphere.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bkhb.EchoSphere.dto.CommentDto;
 import com.bkhb.EchoSphere.entity.Comment;
 import com.bkhb.EchoSphere.entity.EventRemind;
 import com.bkhb.EchoSphere.entity.Post;
 import com.bkhb.EchoSphere.execption.BadRequestException;
 import com.bkhb.EchoSphere.mapper.CommentMapper;
-import com.bkhb.EchoSphere.mapper.EventRemindMapper;
 import com.bkhb.EchoSphere.mapper.PostMapper;
 import com.bkhb.EchoSphere.mapper.UserMapper;
 import com.bkhb.EchoSphere.result.BaseResultCodeEnum;
 import com.bkhb.EchoSphere.service.ICommentService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.bkhb.EchoSphere.service.IPostService;
-import com.bkhb.EchoSphere.service.IUserService;
+import com.bkhb.EchoSphere.service.IEventRemindService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +36,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private final UserMapper userMapper;
     private final CommentMapper commentMapper;
     private final PostMapper postMapper;
-    private final EventRemindMapper eventRemindMapper;
+    private final IEventRemindService eventRemindService;
 
     @Override
     public List<CommentDto> getCommentDtoListByPostId(Long postId) {
@@ -111,7 +109,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         eventRemind.setSourceId(newComment.getCommentId());
         eventRemind.setSourceType("Comment");
         eventRemind.setSourceContent(newComment.getContent());
-        eventRemindMapper.insert(eventRemind);
+        eventRemindService.addEventRemindAsync(eventRemind);
 
         CommentDto commentDto = new CommentDto(commentMapper.selectById(newComment.getCommentId()));
         commentDto.setUserNickName(userMapper.selectById(comment.getTargetId()).getNickName());
